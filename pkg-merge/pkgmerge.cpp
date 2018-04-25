@@ -1,15 +1,14 @@
 // pkgmerge.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <filesystem>
 #include <map>
 #include <list>
-#include <assert.h>
+#include <cassert>
 
 namespace fs = std::experimental::filesystem;
 using std::string;
@@ -84,23 +83,30 @@ void merge(map<string, Package> packages) {
 
 int main(int argc, char *argv[])
 {
-#ifndef _DEBUG
 	if (argc != 2) {
 		std::cout << "No pkg directory supplied\nUsage: pkg-merge.exe <directory>" << std::endl;
 		return 1;
 }
 	string dir = argv[1];
-#else
-	string dir = "E:\\Code\\Go\\src\\github.com\\Tustin\\pkg-merge\\Debug\\pkgs";
-#endif // !_DEBUG
-
 
 	if (!fs::is_directory(dir)) {
 		printf("[error] argument '%s' is not a directory\n", dir.c_str());
 		return 1;
 	}
+
 	map<string, Package> packages;
-	for (auto & file : fs::directory_iterator(dir)) {
+
+	typedef vector<fs::path> vec;	// store paths,
+	vec v;							// so we can sort them later
+
+	std::copy(fs::directory_iterator(dir), fs::directory_iterator(), back_inserter(v));
+
+	std::sort(v.begin(), v.end());	// sort, since directory iteration -- is not ordered on some file systems
+
+	for (vec::const_iterator itx(v.begin()); itx != v.end(); ++itx) {
+	//for (auto & file : fs::directory_iterator(dir)) {
+		fs::directory_entry file = fs::directory_entry(*itx);
+
 		string file_name = file.path().filename().string();
 
 		if (file.path().extension() != ".pkg") {
@@ -156,7 +162,3 @@ int main(int argc, char *argv[])
 	printf("\n[success] completed\n");
 	return 0;
 }
-
-
-
-
