@@ -23,7 +23,6 @@
     <ProjectGuid>{6DA85067-47A3-4D2D-AF9E-26FA35C1E195}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>pkgmerge</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
